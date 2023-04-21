@@ -36,10 +36,11 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.1706, 0.1706, 0.1706], std=[0.2112, 0.2112, 0.2112])
 ])
 
-# Load the pre-trained AlexNet model and move it to GPU
-model = models.alexnet(pretrained=True).cuda()
-# Remove the last layer of the model
-model.classifier = nn.Sequential(*list(model.classifier.children())[:-1])
+# Load the pre-trained ResNet model and move it to GPU
+num_classes = 3
+net = resnet18(pretrained=True)
+num_features = net.fc.in_features
+net.fc = nn.Linear(num_features, num_classes)
 # Set the model to evaluation mode
 model.eval()
 
