@@ -35,10 +35,14 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     normalize,
 ])
-
-args_dict = {'annot_train_prime': r"/storage/home/hpaceice1/dgulur3/df_prime_train.csv",
-             'annot_test_prime': r"/storage/home/hpaceice1/dgulur3/df_prime_test.csv",
-             'data_root': r'/storage/home/hpaceice1/shared-classes/materials/ece8803fml/'}
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--annot_train_prime', type=str,
+                        default='df_prime_train.csv')
+    parser.add_argument('--annot_test_prime', type=str,
+                        default='df_prime_test.csv')
+    parser.add_argument('--data_root', type=str, default='')
+    return parser.parse_args()
 
 args = Namespace(**args_dict)
 
@@ -123,11 +127,11 @@ if __name__ == '__main__':
     test_images_pca = pca.transform(testset.features)
 
     clf = GaussianNB()
-    print("SVC done")
+  
     clf.fit(train_images_pca, trainset._labels)
-    print("Fit done")
+
     y_pred = clf.predict(test_images_pca)
-    print("Prediction done")
+
 
     balanced_accuracy = balanced_accuracy_score(testset._labels, y_pred)
     # Calculate the evaluation metrics of the classifier
