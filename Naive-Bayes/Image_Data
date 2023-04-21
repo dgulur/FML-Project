@@ -113,7 +113,6 @@ if __name__ == '__main__':
     trainset = OCTDataset(args, 'train', transform=transform)
     testset = OCTDataset(args, 'test', transform=transform)
 
-    print("HERE")
 
     # create a DataLoader object for the test set
     testloader = DataLoader(testset, batch_size=batch_size)
@@ -121,7 +120,6 @@ if __name__ == '__main__':
     # create a DataLoader object for the training set
     trainloader = DataLoader(trainset, batch_size=batch_size)
 
-    print("Dataloader done")
 
     # define an empty list to store the data and label arrays
     data_obj_array_test = []
@@ -137,8 +135,6 @@ if __name__ == '__main__':
     # concatenate the data and label arrays
     data_obj_array_test = np.concatenate(data_obj_array_test, axis=0)
     data_label_array_test = np.concatenate(data_label_array_test, axis=0)
-
-    print("Batching done")
 
     # define an empty list to store the data and label arrays
     data_obj_array_train = []
