@@ -38,9 +38,9 @@ transform = transforms.Compose([
 
 # Load the pre-trained ResNet model and move it to GPU
 num_classes = 3
-net = resnet18(pretrained=True)
-num_features = net.fc.in_features
-net.fc = nn.Linear(num_features, num_classes)
+model = resnet18(pretrained=True).cuda()
+num_features = model.fc.in_features
+model.fc = nn.Linear(num_features, num_classes)
 # Set the model to evaluation mode
 model.eval()
 
