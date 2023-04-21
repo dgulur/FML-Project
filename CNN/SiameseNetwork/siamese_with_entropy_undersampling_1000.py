@@ -35,9 +35,14 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.1706, 0.1706, 0.1706], std=[0.2112, 0.2112, 0.2112])
 ])
 
-args_dict = {'annot_train_prime': r"/storage/home/hpaceice1/hkrishna7/ondemand/ECE_8803_Project_FML/df_prime_train.csv",
-             'annot_test_prime': r"/storage/home/hpaceice1/hkrishna7/ondemand/ECE_8803_Project_FML/df_prime_test.csv",
-             'data_root': r'/storage/home/hpaceice1/shared-classes/materials/ece8803fml/'}
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--annot_train_prime', type=str,
+                        default='df_prime_train.csv')
+    parser.add_argument('--annot_test_prime', type=str,
+                        default='df_prime_test.csv')
+    parser.add_argument('--data_root', type=str, default='')
+    return parser.parse_args()
 
 args = Namespace(**args_dict)
 
