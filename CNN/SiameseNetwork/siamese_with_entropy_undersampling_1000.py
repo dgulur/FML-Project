@@ -179,14 +179,18 @@ class SiameseNetwork(nn.Module):
             nn.Linear(128, num_classes)
         )
 
+    # Output layer
+        self.output_layer = nn.Linear(2*num_classes, num_classes).to("cuda")
+
+
     def forward(self, image, metadata):
         # Pass image through the image branch
         image_out = self.image_branch(image)
         # Pass metadata through the metadata branch
         metadata_out = self.metadata_branch(metadata)
-        # Concatenate the outputs from the two branches
-        combined = torch.cat((image_out, metadata_out), dim=1)
-        return combined
+        combined = torch.cat((image_out, metadata_out), dim=1).to("cuda")
+        output = self.output_layer(combined)
+        return output
 
 
 
@@ -201,9 +205,9 @@ else:
 # Train the model with both images and metadata
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 if torch.cuda.is_available():
-    class_weights = torch.tensor([1.0380071905495634, 0.6874149659863945, 1.7185374149659864,1.0380071905495634, 0.6874149659863945, 1.718537414965986], dtype=torch.float32).to('cuda')
+    class_weights = torch.tensor([1.0380071905495634, 0.6874149659863945, 1.7185374149659864], dtype=torch.float32).to('cuda')
 else:
-    class_weights = torch.tensor([1.0380071905495634, 0.6874149659863945, 1.7185374149659864,1.0380071905495634, 0.6874149659863945, 1.718537414965986], dtype=torch.float32).to('cpu')
+    class_weights = torch.tensor([1.0380071905495634, 0.6874149659863945, 1.7185374149659864], dtype=torch.float32).to('cpu')
 loss_function = nn.CrossEntropyLoss()
 
 trainset = OCTDataset(args, 'train', transform=transform)
