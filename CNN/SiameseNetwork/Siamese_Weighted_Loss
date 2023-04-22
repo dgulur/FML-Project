@@ -106,13 +106,13 @@ class OCTDataset(Dataset):
 
 
 class SiameseNetwork(nn.Module):
-    def init(self, num_metadata_features, num_classes):
-        super(SiameseNetwork, self).init()
+    def __init__(self, num_metadata_features, num_classes):
+        super(SiameseNetwork, self).__init__()
         # Image branch
         self.image_branch = models.resnet18(pretrained=True)
         num_features = self.image_branch.fc.in_features
         self.image_branch.fc = nn.Linear(num_features, num_classes)
-
+        
         # Metadata branch
         self.metadata_branch = nn.Sequential(
             nn.Linear(num_metadata_features, 64),
@@ -121,11 +121,9 @@ class SiameseNetwork(nn.Module):
             nn.ReLU(),
             nn.Linear(128, num_classes)
         )
-        # Output layer
-		if torch.cuda.is_available():
-			self.output_layer = nn.Linear(2*num_classes, num_classes).to("cuda")
-		else:
-			self.output_layer = nn.Linear(2*num_classes, num_classes).to("cpu")
+
+    # Output layer
+        self.output_layer = nn.Linear(2*num_classes, num_classes).to("cuda")
 
 
     def forward(self, image, metadata):
@@ -133,10 +131,7 @@ class SiameseNetwork(nn.Module):
         image_out = self.image_branch(image)
         # Pass metadata through the metadata branch
         metadata_out = self.metadata_branch(metadata)
-		if torch.cuda.is_available():
-			combined = torch.cat((image_out, metadata_out), dim=1).to("cuda")
-		else:
-			combined = torch.cat((image_out, metadata_out), dim=1).to("cpu")
+        combined = torch.cat((image_out, metadata_out), dim=1).to("cuda")
         output = self.output_layer(combined)
         return output
 
