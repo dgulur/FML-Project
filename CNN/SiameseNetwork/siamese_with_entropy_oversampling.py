@@ -200,9 +200,9 @@ else:
 # Train the model with both images and metadata
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 if torch.cuda.is_available():
-    class_weights = torch.tensor([1.0380071905495634, 0.6874149659863945, 1.7185374149659864,1.0380071905495634, 0.6874149659863945, 1.718537414965986], dtype=torch.float32).to('cuda')
+    class_weights = torch.tensor([1.0380071905495634, 0.6874149659863945, 1.7185374149659864], dtype=torch.float32).to('cuda')
 else:
-    class_weights = torch.tensor([1.0380071905495634, 0.6874149659863945, 1.7185374149659864,1.0380071905495634, 0.6874149659863945, 1.718537414965986], dtype=torch.float32).to('cpu')
+    class_weights = torch.tensor([1.0380071905495634, 0.6874149659863945, 1.7185374149659864], dtype=torch.float32).to('cpu')
 loss_function = nn.CrossEntropyLoss()
 
 trainset = OCTDataset(args, 'train', transform=transform)
