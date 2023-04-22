@@ -174,14 +174,18 @@ class SiameseNetwork(nn.Module):
             nn.Linear(128, num_classes)
         )
 
+    # Output layer
+        self.output_layer = nn.Linear(2*num_classes, num_classes).to("cuda")
+
+
     def forward(self, image, metadata):
         # Pass image through the image branch
         image_out = self.image_branch(image)
         # Pass metadata through the metadata branch
         metadata_out = self.metadata_branch(metadata)
-        # Concatenate the outputs from the two branches
-        combined = torch.cat((image_out, metadata_out), dim=1)
-        return combined
+        combined = torch.cat((image_out, metadata_out), dim=1).to("cuda")
+        output = self.output_layer(combined)
+        return output
 
 
 
